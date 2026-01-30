@@ -1,6 +1,7 @@
 const coffeeCupImg = document.getElementById('coffeeCupImg');
 const answerElement = document.getElementById('answer');
 const answerContainer = document.getElementById('answerContainer');
+const questionElement = document.querySelector('.question');
 
 let fadeOutTimer = null;
 
@@ -13,26 +14,7 @@ let currentY = 0;
 
 // Coffee wisdom responses
 const coffeeWisdom = [
-    "YES! Life's too short for bad coffee... or no coffee! ☕",
-    "Absolutely! Fuel that productivity rocket! 🚀",
-    "Maybe switch to water? Just kidding, GO FOR IT! 💪",
-    "It's always coffee o'clock somewhere! ⏰",
-    "Only if you want to be AWESOME today! ✨",
-    "Duh! Is that even a question? 😎",
-    "100% YES! Your future self will thank you! 🙌",
-    "The coffee gods say: DRINK UP! ⚡",
-    "Affirmative! Mission: Caffeine is a GO! 🎯",
-    "You know what? You DESERVE IT! 🌟",
-    "Plot twist: The answer is always yes! 🎬",
-    "Science says: Yes. Trust the science. 🧪",
-    "Do bears drink coffee in the woods? ...YES! 🐻",
-    "Your brain cells are literally begging for this! 🧠",
-    "Warning: Not having coffee may result in sadness! ⚠️",
-    "The prophecy foretold... MORE COFFEE! 📜",
-    "YOLO! But like, responsibly caffeinated! 🎉",
-    "If loving coffee is wrong, you don't wanna be right! ❤️",
-    "Breaking news: You need coffee NOW! 📰",
-    "The universe has aligned. Coffee time! 🌌"
+    "YES"
 ];
 
 // Mouse move parallax effect
@@ -94,8 +76,9 @@ function showAnswer() {
     // Get random wisdom
     const wisdom = getRandomWisdom();
 
-    // Hide current answer
+    // Hide current answer and question
     answerElement.classList.remove('show');
+    questionElement.style.opacity = '0';
 
     // Show new answer after a brief delay
     setTimeout(() => {
@@ -105,6 +88,10 @@ function showAnswer() {
         // Auto-fade out after 10 seconds
         fadeOutTimer = setTimeout(() => {
             answerElement.classList.remove('show');
+            // Show question again
+            setTimeout(() => {
+                questionElement.style.opacity = '1';
+            }, 300);
         }, 10000);
     }, 300);
 }

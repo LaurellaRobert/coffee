@@ -4,8 +4,10 @@
     box-sizing: border-box;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 body {
-    font-family: 'Georgia', 'Times New Roman', serif;
+    font-family: 'Bebas Neue', -apple-system, BlinkMacSystemFont, 'Impact', 'Arial Black', sans-serif;
     min-height: 100vh;
     overflow: hidden;
     background-color: #f5f1e8;
@@ -20,6 +22,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    z-index: 1;
 }
 
 .parallax-layer {
@@ -43,12 +46,12 @@ body {
 
 .midground-layer {
     background-image: url('images/midground.png');
-    z-index: 2;
+    z-index: 3;
 }
 
 .foreground-layer {
     background-image: url('images/foreground.png');
-    z-index: 3;
+    z-index: 4;
 }
 
 /* Coffee cup image */
@@ -74,36 +77,47 @@ body {
 
 /* Content overlay */
 .content-overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10;
+    z-index: 2;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     pointer-events: none;
 }
 
 .container {
-    text-align: center;
-    padding: 2rem;
-    max-width: 700px;
+    text-align: left;
+    padding: 0;
+    max-width: 100%;
     width: 100%;
     pointer-events: auto;
+    position: relative;
+    min-height: 20vh;
 }
 
 /* Typography */
 .question {
-    font-size: 3rem;
-    font-weight: 400;
-    margin-bottom: 3rem;
-    color: #3d2817;
-    line-height: 1.3;
-    text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.8);
-    font-style: italic;
-    letter-spacing: 0.5px;
+    font-size: clamp(3.375rem, 10.125vw, 10.125rem);
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    line-height: 1.0;
+    text-shadow: 3px 3px 8px rgba(61, 40, 23, 0.3);
+    font-style: normal;
+    letter-spacing: -0.08em;
+    text-transform: uppercase;
+    word-spacing: 0.05em;
+    width: 100%;
+    max-width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.3s ease;
 }
 
 /* Button styling */
@@ -163,44 +177,57 @@ body {
 
 /* Answer container */
 .answer-container {
-    margin-top: 3rem;
+    margin: 0;
     min-height: 140px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .answer {
-    font-size: 1.8rem;
-    font-weight: 400;
-    background: rgba(245, 241, 232, 0.95);
-    padding: 2rem 2.5rem;
-    border-radius: 12px;
-    border: 2px solid rgba(139, 90, 43, 0.3);
-    box-shadow: 0 8px 24px rgba(61, 40, 23, 0.2),
-                inset 0 1px 3px rgba(255, 255, 255, 0.5);
+    font-size: clamp(3.375rem, 10.125vw, 10.125rem);
+    font-weight: 700;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
     opacity: 0;
-    transform: scale(0.9);
-    transition: all 0.5s ease;
-    color: #3d2817;
-    line-height: 1.4;
-    font-style: italic;
+    transition: opacity 0.4s ease;
+    color: #ffffff;
+    line-height: 1.0;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: -0.08em;
+    text-shadow: 3px 3px 8px rgba(61, 40, 23, 0.3);
+    width: 100%;
+    max-width: 100%;
 }
 
 .answer.show {
     opacity: 1;
-    transform: scale(1);
-    animation: fadeInUp 0.6s ease;
 }
 
-@keyframes fadeInUp {
+@keyframes dramaticEntry {
     0% {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(60px) scale(0.7) rotate(-5deg);
+        filter: blur(8px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.05) rotate(1deg);
+        filter: blur(0px);
     }
     100% {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1) rotate(0deg);
+        filter: blur(0px);
     }
 }
 
@@ -230,19 +257,13 @@ body {
 
 /* Responsive design */
 @media (max-width: 768px) {
-    .question {
-        font-size: 2rem;
-        margin-bottom: 2rem;
+    .container {
+        padding: 0;
     }
 
     .decision-button {
         padding: 1.2rem 2.5rem;
         font-size: 1.2rem;
-    }
-
-    .answer {
-        font-size: 1.4rem;
-        padding: 1.5rem 2rem;
     }
 
     .parallax-layer {
@@ -252,17 +273,12 @@ body {
 }
 
 @media (max-width: 480px) {
-    .question {
-        font-size: 1.6rem;
+    .container {
+        padding: 0;
     }
 
     .decision-button {
         padding: 1rem 2rem;
         font-size: 1.1rem;
-    }
-
-    .answer {
-        font-size: 1.2rem;
-        padding: 1.2rem 1.5rem;
     }
 }
