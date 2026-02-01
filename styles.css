@@ -14,6 +14,18 @@ body {
     cursor: default;
 }
 
+/*
+Z-INDEX HIERARCHY:
+- parallax-container: 1 (contains background/text/midground/foreground layers)
+  - background-layer: 1
+  - content-overlay (text): 2
+  - midground-layer: 3
+  - foreground-layer: 4
+- coffee-cup-img: 100 (interactive element)
+- particleCanvas: 101 (particles above coffee cup)
+- signature: 200 (always on top)
+*/
+
 /* Parallax container and layers */
 .parallax-container {
     position: fixed;
@@ -37,6 +49,7 @@ body {
     transform: translate(-50%, -50%);
     transition: transform 0.3s ease-out;
     will-change: transform;
+    pointer-events: none;
 }
 
 .background-layer {
@@ -54,13 +67,79 @@ body {
     z-index: 4;
 }
 
+/* Signature */
+.signature {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 200;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgba(61, 40, 23, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+    background: rgba(245, 241, 232, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.signature:hover {
+    color: rgba(61, 40, 23, 1);
+    background: rgba(245, 241, 232, 0.9);
+}
+
+/* Counter */
+.counter {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 200;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgba(61, 40, 23, 0.8);
+    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+    background: rgba(245, 241, 232, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+/* Hold progress bar */
+.hold-progress-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 250;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.hold-progress-container.visible {
+    opacity: 1;
+}
+
+.hold-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: white;
+    transition: width 2s linear;
+}
+
+.hold-progress-bar.filling {
+    width: 100%;
+}
+
 /* Coffee cup image */
 .coffee-cup-img {
     position: fixed;
     left: 406px;
     top:591px;
     transform: translate(-50%, -50%);
-    z-index: 999;
+    z-index: 100;
     cursor: default;
     transition: transform 0.3s ease-out, filter 0.3s ease;
     width: 353px;
@@ -87,6 +166,12 @@ body {
     align-items: flex-start;
     justify-content: center;
     pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.content-overlay.text-focused {
+    z-index: 150;
+    transform: scale(1.02);
 }
 
 .container {
@@ -101,7 +186,7 @@ body {
 
 /* Typography */
 .question {
-    font-size: clamp(3.375rem, 10.125vw, 10.125rem);
+    font-size: clamp(3.88125rem, 11.64375vw, 11.64375rem);
     font-weight: 700;
     margin: 0;
     padding: 0;
@@ -118,6 +203,7 @@ body {
     top: 0;
     left: 0;
     transition: opacity 0.3s ease;
+    cursor: pointer;
 }
 
 /* Button styling */
@@ -189,7 +275,7 @@ body {
 }
 
 .answer {
-    font-size: clamp(3.375rem, 10.125vw, 10.125rem);
+    font-size: clamp(3.88125rem, 11.64375vw, 11.64375rem);
     font-weight: 700;
     background: transparent;
     padding: 0;
@@ -207,6 +293,7 @@ body {
     text-shadow: 3px 3px 8px rgba(61, 40, 23, 0.3);
     width: 100%;
     max-width: 100%;
+    cursor: pointer;
 }
 
 .answer.show {
@@ -255,6 +342,211 @@ body {
     100% { filter: hue-rotate(360deg); }
 }
 
+/* Hold animation variations */
+@keyframes rainbowSpin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(180deg) scale(1.2);
+        filter: hue-rotate(180deg) brightness(1.3);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg) scale(1);
+        filter: hue-rotate(360deg) brightness(1);
+    }
+}
+
+@keyframes earthquakeShake {
+    0%, 100% {
+        transform: translate(-50%, -50%);
+        filter: brightness(1);
+    }
+    10% { transform: translate(-45%, -55%) rotate(5deg); }
+    20% { transform: translate(-55%, -45%) rotate(-5deg); }
+    30% { transform: translate(-48%, -52%) rotate(3deg); }
+    40% { transform: translate(-52%, -48%) rotate(-3deg); }
+    50% { transform: translate(-50%, -50%) scale(1.1); filter: brightness(1.3); }
+    60% { transform: translate(-48%, -52%) rotate(2deg); }
+    70% { transform: translate(-52%, -48%) rotate(-2deg); }
+    80% { transform: translate(-49%, -51%) rotate(1deg); }
+    90% { transform: translate(-51%, -49%) rotate(-1deg); }
+}
+
+@keyframes pulseBeat {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+    }
+    25% {
+        transform: translate(-50%, -50%) scale(0.7);
+        filter: brightness(0.7);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.4);
+        filter: brightness(1.5) saturate(1.5);
+    }
+    75% {
+        transform: translate(-50%, -50%) scale(0.9);
+        filter: brightness(0.9);
+    }
+}
+
+@keyframes spiralAscend {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -70%) rotate(720deg) scale(0.5);
+        filter: brightness(1.5) hue-rotate(180deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(1440deg) scale(1);
+    }
+}
+
+@keyframes colorCycle {
+    0% { filter: brightness(1.2) saturate(2) hue-rotate(0deg); }
+    20% { filter: brightness(1.3) saturate(2) hue-rotate(72deg); }
+    40% { filter: brightness(1.2) saturate(2) hue-rotate(144deg); }
+    60% { filter: brightness(1.3) saturate(2) hue-rotate(216deg); }
+    80% { filter: brightness(1.2) saturate(2) hue-rotate(288deg); }
+    100% { filter: brightness(1.2) saturate(2) hue-rotate(360deg); }
+}
+
+@keyframes bouncyParty {
+    0%, 100% { transform: translate(-50%, -50%); }
+    10% { transform: translate(-50%, -70%) scale(1.1); }
+    20% { transform: translate(-50%, -50%) scale(0.9); }
+    30% { transform: translate(-30%, -50%) scale(1.1) rotate(20deg); }
+    40% { transform: translate(-50%, -50%) scale(0.9) rotate(0deg); }
+    50% { transform: translate(-50%, -30%) scale(1.2) rotate(-20deg); }
+    60% { transform: translate(-50%, -50%) scale(0.9) rotate(0deg); }
+    70% { transform: translate(-70%, -50%) scale(1.1) rotate(20deg); }
+    80% { transform: translate(-50%, -50%) scale(0.9) rotate(0deg); }
+    90% { transform: translate(-50%, -60%) scale(1.1); }
+}
+
+@keyframes glitchEffect {
+    0%, 100% {
+        transform: translate(-50%, -50%);
+        filter: brightness(1);
+    }
+    10% {
+        transform: translate(-48%, -50%);
+        filter: brightness(1.5) hue-rotate(90deg);
+    }
+    20% {
+        transform: translate(-52%, -50%);
+        filter: brightness(0.8) hue-rotate(180deg);
+    }
+    30% {
+        transform: translate(-50%, -48%);
+        filter: brightness(1.3) hue-rotate(270deg);
+    }
+    40% {
+        transform: translate(-50%, -52%);
+        filter: brightness(1.1) invert(0.3);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        filter: brightness(1.4) contrast(1.5);
+    }
+    60% {
+        transform: translate(-51%, -49%);
+        filter: brightness(1.2) saturate(3);
+    }
+    80% {
+        transform: translate(-49%, -51%);
+        filter: brightness(1) hue-rotate(45deg);
+    }
+}
+
+@keyframes explosionBurst {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(2.5);
+        filter: brightness(2) saturate(2) blur(5px);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rotationMatrix {
+    0% {
+        transform: translate(-50%, -50%) rotateY(0deg) rotateX(0deg);
+    }
+    25% {
+        transform: translate(-50%, -50%) rotateY(180deg) rotateX(20deg) scale(1.2);
+        filter: brightness(1.3);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotateY(360deg) rotateX(0deg) scale(1);
+    }
+    75% {
+        transform: translate(-50%, -50%) rotateY(540deg) rotateX(-20deg) scale(1.2);
+        filter: brightness(1.3);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotateY(720deg) rotateX(0deg);
+    }
+}
+
+@keyframes waveDistortion {
+    0%, 100% {
+        transform: translate(-50%, -50%);
+        filter: brightness(1);
+    }
+    10% { transform: translate(-50%, -50%) scaleY(1.3) scaleX(0.8); }
+    20% { transform: translate(-50%, -50%) scaleY(0.8) scaleX(1.3); }
+    30% { transform: translate(-50%, -50%) scaleY(1.2) scaleX(0.9) rotate(10deg); }
+    40% { transform: translate(-50%, -50%) scaleY(0.9) scaleX(1.2) rotate(-10deg); }
+    50% { transform: translate(-50%, -50%) scaleY(1.4) scaleX(0.7); filter: brightness(1.4); }
+    60% { transform: translate(-50%, -50%) scaleY(0.7) scaleX(1.4) rotate(5deg); }
+    70% { transform: translate(-50%, -50%) scaleY(1.1) scaleX(0.95) rotate(-5deg); }
+    80% { transform: translate(-50%, -50%) scaleY(0.95) scaleX(1.1); }
+    90% { transform: translate(-50%, -50%) scaleY(1.05) scaleX(0.98); }
+}
+
+/* Golden shimmer animation for 10th click */
+@keyframes goldenShimmer {
+    0% {
+        filter: brightness(1) saturate(1) drop-shadow(0 0 0px rgba(255, 215, 0, 0));
+    }
+    25% {
+        filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+    }
+    50% {
+        filter: brightness(1.6) saturate(2) drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+    }
+    75% {
+        filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+    }
+    100% {
+        filter: brightness(1) saturate(1) drop-shadow(0 0 0px rgba(255, 215, 0, 0));
+    }
+}
+
+/* Duplicate coffee cups animation */
+.duplicate-cup {
+    position: fixed;
+    width: 353px;
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    filter: brightness(1.6) saturate(2) drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+    transition: opacity 0.3s ease;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {
@@ -269,6 +561,12 @@ body {
     .parallax-layer {
         /* Reduce parallax effect on mobile */
         background-size: cover;
+    }
+
+    .signature {
+        font-size: 0.75rem;
+        top: 1rem;
+        right: 1rem;
     }
 }
 
