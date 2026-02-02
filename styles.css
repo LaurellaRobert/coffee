@@ -552,7 +552,7 @@ Z-INDEX HIERARCHY:
 }
 
 /* Responsive design */
-@media (max-width: 900px) {
+@media (max-width: 1320px) {
     .container {
         padding: 0;
     }

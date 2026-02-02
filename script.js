@@ -12,10 +12,10 @@ let mouseY = 0;
 let currentX = 0;
 let currentY = 0;
 
-// Time-aware coffee wisdom responses
+// Time-aware responses
 const coffeeWisdom = {
     morning: [
-        "Yes. It's before noon.!",
+        "Yes. It's before noon.",
     ],
     afternoon: [
         "Yes. It's the middle of the day.",
